@@ -1,7 +1,7 @@
 .data
 a:	.double 9.0, 4.5, 6.0, 2.0, 7.0, 1.0, 9.8, 5.9, 7.7, 8.2
 len:	.long 10
-str:	.asciz "Promedio: %lf\n"
+str:	.asciz "Suma: %lf\nPromedio: %lf\n"
 
 .text
 f:
@@ -22,7 +22,12 @@ decl %esi
 jmp bucle
 
 fin:
+xorps %xmm2, %xmm2
+movsd %xmm0, %xmm2
 divsd %xmm1, %xmm0
+
+movsd %xmm0, %xmm1
+movsd %xmm2, %xmm0
 
 movq $2, %rax
 leaq str, %rdi
@@ -34,7 +39,6 @@ ret
 
 .global main
 main:
-	#subq $8, %rsp
 pushq %rbp
 movq %rsp, %rbp
 
@@ -42,5 +46,4 @@ leaq a, %rdi
 movl len, %esi
 call f
 leave
-	#addq $8, %rsp
 ret
